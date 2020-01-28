@@ -26,7 +26,7 @@ class App extends React.Component {
               id: snapShot.id,
               ...snapShot.data()
             }
-          }, () => console.log(this.state));
+          }, () => console.log('signIn',this.state));
         });
       } else {
         this.setState({
