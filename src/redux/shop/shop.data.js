@@ -201,7 +201,7 @@ export const SHOP_DATA = {
       }
     ]
   },
-  mesn: {
+  mens: {
     id: 5,
     title: 'Mens',
     routeName: 'mens',
