@@ -1,6 +1,6 @@
-import firebase from "firebase/app";
-import "firebase/firebase-firestore";
-import "firebase/auth";
+import { initializeApp } from 'firebase/app';
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from 'firebase/auth';
+import { getFirestore, doc, getDoc, setDoc, collection, writeBatch } from 'firebase/firestore';
 
 const config = {
   apiKey: "AIzaSyD7Gt72ivfw4PTeJsxi7M9i9o3fSR57Tak",
@@ -13,21 +13,21 @@ const config = {
   measurementId: "G-8DJBZ9WQ08"
 };
 
-firebase.initializeApp(config);
-export const auth = firebase.auth();
-export const firestore = firebase.firestore();
+const app = initializeApp(config);
+export const auth = getAuth(app);
+export const firestore = getFirestore(app);
 
 export const createUserProfileDocument = async (userAuth, additionalData) => {
   if (!userAuth) return;
-  const userRef = firestore.doc(`users/${userAuth.uid}`);
+  const userRef = doc(firestore, `users/${userAuth.uid}`);
 
-  const snapShot = await userRef.get();
-  if (!snapShot.exists) {
+  const snapShot = await getDoc(userRef);
+  if (!snapShot.exists()) {
     const { displayName, email } = userAuth;
     const createdAt = new Date();
 
     try {
-      await userRef.set({
+      await setDoc(userRef, {
         displayName: displayName,
         email: email,
         createdAt: createdAt,
@@ -41,11 +41,11 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
 };
 
 export const addCollectionAndDocuments = async (collectionKey, objectToAdd) => {
-  const collectionRef = firestore.collection(collectionKey);
+  const collectionRef = collection(firestore, collectionKey);
 
-  const batch = firestore.batch();
+  const batch = writeBatch(firestore);
   objectToAdd.forEach(obj => {
-    const newDocRef = collectionRef.doc();
+    const newDocRef = doc(collectionRef);
     batch.set(newDocRef, obj);
   });
   return await batch.commit();
@@ -70,16 +70,14 @@ export const convertCollectionsSnapshopToMap = collections => {
 
 export const getCurrentUser = () => {
   return new Promise((resolve, reject) => {
-    const unsubscribe = auth.onAuthStateChanged(userAuth => {
+    const unsubscribe = onAuthStateChanged(auth, userAuth => {
       unsubscribe();
       resolve(userAuth);
     }, reject);
   });
 };
 
-export const googleProvider = new firebase.auth.GoogleAuthProvider();
+export const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({ prompt: "select_account" });
 //being used in user.saga now
-export const signInWithGoogle = () => auth.signInWithPopup(googleProvider);
-
-export default firebase;
+export const signInWithGoogle = () => signInWithPopup(auth, googleProvider);
