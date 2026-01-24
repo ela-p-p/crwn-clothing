@@ -1,5 +1,5 @@
 import React from "react";
-import { Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { connect } from "react-redux";
 
 import { fetchCollectionsStart } from "../../redux/shop/shop.actions";
@@ -14,18 +14,12 @@ class ShopPage extends React.Component {
   }
 
   render() {
-    const { match } = this.props;
     return (
       <div className="shop-page">
-        <Route
-          exact
-          path={`${match.path}`}
-          component={CollectionsOverviewContainer}
-        />
-        <Route
-          path={`${match.path}/:collectionId`}
-          component={CollectionPageContainer}
-        />
+        <Routes>
+          <Route index element={<CollectionsOverviewContainer />} />
+          <Route path=":collectionId" element={<CollectionPageContainer />} />
+        </Routes>
       </div>
     );
   }
