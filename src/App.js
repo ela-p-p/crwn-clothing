@@ -14,7 +14,6 @@ import "./App.css";
 
 class App extends React.Component {
   unSubscribeFromAuth = null;
-
   componentDidMount() {
     const { checkUserSession } = this.props;
     checkUserSession();
@@ -25,6 +24,8 @@ class App extends React.Component {
   }
 
   render() {
+    console.log("App.js loaded");
+
     return (
       <div>
         <Header />
@@ -48,11 +49,11 @@ class App extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
-  currentUser: selectCurrentUser(state)
+const mapStateToProps = (state) => ({
+  currentUser: selectCurrentUser(state),
 });
-const mapDispatchToProps = dispatch => ({
-  checkUserSession: () => dispatch(checkUserSession())
+const mapDispatchToProps = (dispatch) => ({
+  checkUserSession: () => dispatch(checkUserSession()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
