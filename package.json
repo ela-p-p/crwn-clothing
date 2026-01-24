@@ -7,7 +7,6 @@
     "@testing-library/react": "^12.1.5",
     "@testing-library/user-event": "^13.5.0",
     "firebase": "^12.8.0",
-    "sass": "^1.77.8",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.9",
@@ -20,6 +19,7 @@
     "redux-saga": "^1.4.2",
     "redux-thunk": "^3.1.0",
     "reselect": "^5.1.1",
+    "sass": "^1.77.8",
     "styled-components": "^5.3.11"
   },
   "scripts": {
